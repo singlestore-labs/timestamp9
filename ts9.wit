@@ -1,0 +1,2 @@
+str-to-ts9: func(s: string) -> s64
+ts9-to-str: func(n: s64) -> string
