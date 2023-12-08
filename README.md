@@ -4,9 +4,7 @@
 CREATE TABLE `t2` (
   `dt` bigint(20) DEFAULT NULL,
   `str_dt` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `dt6_dt` datetime(6) DEFAULT NULL,
-  KEY `__UNORDERED` () USING CLUSTERED COLUMNSTORE
-  , SHARD KEY () 
+  `dt6_dt` datetime(6) DEFAULT NULL
 );
 
 set @d = concat(now(6), "999");
