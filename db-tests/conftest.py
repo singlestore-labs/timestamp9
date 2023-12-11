@@ -102,11 +102,9 @@ class _TestContainerManager():
         yield self.dev_image_name
 
     def print_logs(self):
-        logs_command = f"docker logs {self.container_name}"
-        logger.info(f"Getting logs: {logs_command}")
+        logs_command = ["docker", "logs", self.container_name]
+        logger.info(f"Getting logs")
         logger.info(subprocess.check_output(logs_command))
-        for i in range(10):
-            logger.info(f"flush {i}")
 
     def connect(self):
         # Run all but one attempts trying again if they fail
