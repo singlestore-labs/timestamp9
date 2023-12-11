@@ -1,43 +1,46 @@
-# String to TS 9
+# Timestamp 9
 
-```sql
-CREATE TABLE `t2` (
-  `dt` bigint(20) DEFAULT NULL,
-  `str_dt` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `dt6_dt` datetime(6) DEFAULT NULL
-);
+A SingleStore extension using the Abstract Data Type (ADT) pattern.
 
-set @d = concat(now(6), "999");
-insert t2 values 
-  (str_to_ts9(@d), @d, SUBSTRING(@d, 1, CHAR_LENGTH(@d) - 3));
+## Usage
 
-set @d = concat(now(6), "555");
-insert t2 values 
-  (str_to_ts9(@d), @d, SUBSTRING(@d, 1, CHAR_LENGTH(@d) - 3));
+The Wasm functions can be individually.
 
-/* show functions in SQL select */
-select dt, ts9_to_str(dt) as s, str_to_ts9(s), str_dt 
-from t2 
-order by 1;
+```
+CREATE FUNCTION ts9_to_str AS WASM FROM LOCAL INFILE "ts9.wasm" WITH WIT FROM LOCAL INFILE "ts9.wit"
+
+CREATE FUNCTION str_to_ts9 AS WASM FROM LOCAL INFILE "ts9.wasm" WITH WIT FROM LOCAL INFILE "ts9.wit"
 ```
 
+For more examples, checkout the [db tests](./db-tests/test_create_function.py).
+
+### Post 8.5
+
+After release 8.5, you'll be able to install it as an extension.
+
 ```sql
-singlestore> select * from t2;
-+---------------------+-------------------------------+----------------------------+
-| dt                  | str_dt                        | dt6_dt                     |
-+---------------------+-------------------------------+----------------------------+
-| 1679626478941891999 | 2023-03-24 02:54:38.941891999 | 2023-03-24 02:54:38.941891 |
-| 1679626478968816555 | 2023-03-24 02:54:38.968816555 | 2023-03-24 02:54:38.968816 |
-+---------------------+-------------------------------+----------------------------+
-
-/* notice auto-cast to string for datetime(6) makes it work 
-  as argument to str_to_ts9 */
-
-singlestore> select dt, str_to_ts9(dt6_dt) from t2;
-+---------------------+---------------------+
-| dt                  | str_to_ts9(dt6_dt)  |
-+---------------------+---------------------+
-| 1679626478941891999 | 1679626478941891000 |
-| 1679626478968816555 | 1679626478968816000 |
-+---------------------+---------------------+
+CREATE EXTENSION ts9 FROM ...
 ```
+
+## Building
+
+In order to build the Wasm
+
+1. Install Rust and Cargo
+2. Install the Rust `wasm32-wasi` target
+3. Run `cargo build --target wasm32-wasi`
+
+## Testing
+
+There are automated script tests in the `db-tests` directory.
+They are run against the `singlestoredb-dev-image`.
+
+In order to run the tests
+
+1. Install Python 3
+2. Install `singlestoredb` and `pytest` (and optionally `pytest-xdist`)
+3. Set the `SINGLESTORE_LICENSE` environment variable
+4. Run the `pytest` command
+
+If you installed `pytest-xdist`, you can also distribute the tests to multiple workers
+by running `pytest -n auto` or giving a specific number instead of `auto`
