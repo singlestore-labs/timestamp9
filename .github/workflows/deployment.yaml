@@ -26,7 +26,7 @@ jobs:
 
     - name: Select Release Version
       run: |
-        echo "release_version=$(cargo metadata | jq '.packages[] | select(.name=="ts9") .version')" >> $GITHUB_ENV
+        echo "release_version=$(cargo metadata | jq -r '.packages[] | select(.name=="ts9") .version')" >> $GITHUB_ENV
 
     - name: Release
       uses: "marvinpinto/action-automatic-releases@latest"
