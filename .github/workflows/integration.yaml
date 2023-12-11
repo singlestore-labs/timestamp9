@@ -40,7 +40,7 @@ jobs:
         rustup target add wasm32-unknown-unknown
 
     - name: Build Wasm
-      run: cargo build --target wasm32-unknown-unknown
+      run: cargo build --target wasm32-wasi
 
     - name: Setup db tests
       run: pip install singlestoredb pytest
