@@ -10,10 +10,10 @@ from singlestoredb.connection import Connection
 
 logger = logging.getLogger(__name__)
 
-STARTUP_CONNECT_ATTEMPTS = 10
+STARTUP_CONNECT_ATTEMPTS = 30
 STARTUP_CONNECT_TIMEOUT_SECONDS = 2
 
-TEARDOWN_WAIT_ATTEMPTS = 20
+TEARDOWN_WAIT_ATTEMPTS = 30
 TEARDOWN_WAIT_SECONDS = 2
 
 EXECUTION_MODE = Literal["sequential", "leader", "follower"]
@@ -105,6 +105,8 @@ class _TestContainerManager():
         logs_command = f"docker logs {self.container_name}"
         logger.info(f"Getting logs: {logs_command}")
         logger.info(subprocess.check_output(logs_command))
+        for i in range(10):
+            logger.info(f"flush {i}")
 
     def connect(self):
         # Run all but one attempts trying again if they fail
