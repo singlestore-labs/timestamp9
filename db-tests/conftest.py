@@ -10,10 +10,10 @@ from singlestoredb.connection import Connection
 
 logger = logging.getLogger(__name__)
 
-STARTUP_CONNECT_ATTEMPTS = 30
+STARTUP_CONNECT_ATTEMPTS = 10
 STARTUP_CONNECT_TIMEOUT_SECONDS = 2
 
-TEARDOWN_WAIT_ATTEMPTS = 30
+TEARDOWN_WAIT_ATTEMPTS = 20
 TEARDOWN_WAIT_SECONDS = 2
 
 EXECUTION_MODE = Literal["sequential", "leader", "follower"]
@@ -80,7 +80,10 @@ class _TestContainerManager():
 
         logger.info(f"Starting container {self.container_name}")
         try:
-            subprocess.check_call(command, shell=True)
+            env = {
+                "SINGLESTORE_LICENSE": os.environ["SINGLESTORE_LICENSE"]
+            }
+            subprocess.check_call(command, shell=True, env=env)
         except Exception as e:
             logger.exception(e)
             raise RuntimeError("Failed to start container. Is one already running?") from e
