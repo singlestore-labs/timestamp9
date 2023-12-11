@@ -33,12 +33,12 @@ jobs:
 
     - name: Check Version
       run: |
-        echo "Version: ${{ steps.versioning.release_version }}"
+        echo "Version: ${{ steps.versioning.outputs.release_version }}"
 
     - name: Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        title: "ts9 ${{ steps.versioning.release_version }}"
+        title: "ts9 ${{ steps.versioning.outputs.release_version }}"
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: latest
         prerelease: false
