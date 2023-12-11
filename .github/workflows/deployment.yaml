@@ -31,6 +31,10 @@ jobs:
         echo "Version: $VERSION"
         echo "release_version=$VERSION" >> "$GITHUB_OUTPUT"
 
+    - name: Check Version
+      run: |
+        echo "Version: ${{ steps.versioning.release_version }}"
+
     - name: Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
