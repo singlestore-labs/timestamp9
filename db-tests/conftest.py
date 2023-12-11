@@ -80,8 +80,10 @@ class _TestContainerManager():
 
         logger.info(f"Starting container {self.container_name}")
         try:
+            license = os.environ["SINGLESTORE_LICENSE"]
+            logger.info(f"len(SL) = {len(license)}")
             env = {
-                "SINGLESTORE_LICENSE": os.environ["SINGLESTORE_LICENSE"]
+                "SINGLESTORE_LICENSE": license
             }
             subprocess.check_call(command, shell=True, env=env)
         except Exception as e:
