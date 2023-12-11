@@ -61,13 +61,12 @@ class _TestContainerManager():
     def __init__(self):
         self.container_name = "singlestoredb-test-container"
         self.dev_image_name = "ghcr.io/singlestore-labs/singlestoredb-dev"
-        self.singlestore_license = os.environ.get("SINGLESTORE_LICENSE")
 
-        assert self.singlestore_license is not None, "SINGLESTORE_LICENSE not set"
+        assert "SINGLESTORE_LICENSE" in os.environ, "SINGLESTORE_LICENSE not set"
 
         self.root_password = "Q8r4D7yXR8oqn"
         self.environment_vars = {
-            "SINGLESTORE_LICENSE": f"\"{self.singlestore_license}\"",
+            "SINGLESTORE_LICENSE": None,
             "ROOT_PASSWORD": f"\"{self.root_password}\"",
             "SINGLESTORE_SET_GLOBAL_DEFAULT_PARTITIONS_PER_LEAF": "1"
         }
@@ -93,7 +92,10 @@ class _TestContainerManager():
         yield self.container_name
         for key, value in self.environment_vars.items():
             yield "-e"
-            yield f"{key}={value}"
+            if value is None:
+                yield key
+            else:
+                yield f"{key}={value}"
 
         for port in self.ports:
             yield "-p"
