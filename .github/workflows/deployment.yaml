@@ -26,12 +26,12 @@ jobs:
 
     - name: Select Release Version
       run: |
-        echo "release_version=$(cargo metadata | jq -r '.packages[] | select(.name=="ts9") .version')" >> $GITHUB_ENV
+        echo "release_version=$(cargo metadata | jq -r '.packages[] | select(.name=="ts9") .version')" >> "$GITHUB_ENV"
 
     - name: Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        title: ts9 $release_version
+        title: "ts9 $release_version"
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: latest
         prerelease: false
