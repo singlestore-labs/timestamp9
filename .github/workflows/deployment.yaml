@@ -29,6 +29,7 @@ jobs:
       with:
         title: ts9 ${ cargo metadtata | jq '.packages[] | select(.name=="ts9") .version' }
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: latest
         prerelease: false
         files: |
           ts9.tar
