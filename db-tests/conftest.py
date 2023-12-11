@@ -81,7 +81,6 @@ class _TestContainerManager():
         logger.info(f"Starting container {self.container_name}")
         try:
             license = os.environ["SINGLESTORE_LICENSE"]
-            logger.info(f"len(SL) = {len(license)}")
             env = {
                 "SINGLESTORE_LICENSE": license
             }
