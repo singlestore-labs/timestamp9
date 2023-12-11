@@ -25,13 +25,14 @@ jobs:
         tar cvf ts9.tar ts9.sql ts9.wasm ts9.wit 
 
     - name: Select Release Version
+      id: version_select
       run: |
-        echo "release_version=$(cargo metadata | jq -r '.packages[] | select(.name=="ts9") .version')" >> "$GITHUB_ENV"
+        echo "release_version=$(cargo metadata | jq -r '.packages[] | select(.name=="ts9") .version')" >> "$GITHUB_OUTPUT"
 
     - name: Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        title: "ts9 ${{ release_version }}"
+        title: "ts9 ${{ steps.version_select.release_version }}"
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: latest
         prerelease: false
