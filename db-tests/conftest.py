@@ -80,7 +80,6 @@ class _TestContainerManager():
         command = ' '.join(self._start_command())
 
         logger.info(f"Starting container {self.container_name}")
-        logger.debug(f"Docker command: {command}")
         try:
             subprocess.check_call(command, shell=True)
         except Exception as e:
@@ -102,6 +101,11 @@ class _TestContainerManager():
 
         yield self.dev_image_name
 
+    def print_logs(self):
+        logs_command = f"docker logs {self.container_name}"
+        logger.info(f"Getting logs: {logs_command}")
+        logger.info(subprocess.check_output(logs_command))
+
     def connect(self):
         # Run all but one attempts trying again if they fail
         for i in range(STARTUP_CONNECT_ATTEMPTS - 1):
@@ -117,6 +121,7 @@ class _TestContainerManager():
             except Exception as e:
                 logger.error("Timed out while waiting to connect to database.")
                 logger.exception(e)
+                self.print_logs()
                 raise RuntimeError("Failed to connect to database") from e
 
     def wait_till_connections_closed(self):
@@ -127,6 +132,7 @@ class _TestContainerManager():
             time.sleep(TEARDOWN_WAIT_SECONDS)
         else:
             logger.warning("Timed out while waiting for other connections to close")
+            self.print_logs()
 
     def get_open_connections(self, conn: Connection) -> Optional[int]:
         for row in conn.show.status(extended=True):
