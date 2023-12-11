@@ -15,7 +15,7 @@ CREATE TABLE `t2` (
 def test_create_functions(singlestoredb_tempdb: Cursor):
     cursor = singlestoredb_tempdb
 
-    wasm = Path.cwd() / "target" / "wasm32-wasi" / "release" / "ts9.wasm"
+    wasm = Path.cwd() / "target" / "wasm32-wasi" / "debug" / "ts9.wasm"
     wit = Path.cwd() / "ts9.wit"
 
     wasm_data = base64.b64encode(wasm.read_bytes()).decode()
