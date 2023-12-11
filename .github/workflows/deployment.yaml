@@ -28,6 +28,7 @@ jobs:
       id: versioning
       run: |
         VERSION=$(cargo metadata --format-version 1 | jq -r '.packages[] | select(.name=="ts9") .version')
+        echo "Version: $VERSION"
         echo "release_version=$VERSION" >> "$GITHUB_OUTPUT"
 
     - name: Release
