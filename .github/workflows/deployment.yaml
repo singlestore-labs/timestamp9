@@ -31,7 +31,7 @@ jobs:
     - name: Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        title: "ts9 $release_version"
+        title: "ts9 ${{ release_version }}"
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: latest
         prerelease: false
