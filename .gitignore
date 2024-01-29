@@ -1,3 +1,6 @@
 target
 .python-version
 **/__pycache__
+
+ts9.tar
+ts9.wasm
