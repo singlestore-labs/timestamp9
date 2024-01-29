@@ -43,7 +43,7 @@ jobs:
       run: cargo build --target wasm32-wasi
 
     - name: Setup db tests
-      run: pip install singlestoredb pytest
+      run: pip install singlestoredb[pytest]
 
     - name: Run db tests
       env:
